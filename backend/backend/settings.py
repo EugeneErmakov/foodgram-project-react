@@ -6,7 +6,7 @@ SECRET_KEY = 'django-insecure-s8palv!!ldolqthjl6iq=8p9f!-*4)6*h@-bn4pc!%vv+u6#je
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'foodgram.ermstudio.ru']
 
 
 INSTALLED_APPS = [
@@ -16,6 +16,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
+    'recipes.apps.RecipesConfig',
+    'rest_framework.authtoken',
+    # 'django_filters',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +77,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'users.UserModel'
 
 LANGUAGE_CODE = 'en-us'
 
