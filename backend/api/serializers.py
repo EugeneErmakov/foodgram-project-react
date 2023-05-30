@@ -20,3 +20,4 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'is_subscribed'
         )
+
