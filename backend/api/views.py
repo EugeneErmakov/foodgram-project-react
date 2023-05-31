@@ -17,3 +17,24 @@ class UserViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     permission_classes = (AllowAny,)
     lookup_field = 'id'
+
+class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = IngredientSerializer
+    queryset = Ingredient.objects.all()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    filter_backends = (IngredientFilter, )
+    search_fields = ('^name', )
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+
+
+class RecipeViewSet(viewsets.ModelViewSet):
+    queryset = Recipe.objects.all()
+    serializer_class = CreateRecipeSerializer
+    permission_classes = (AuthorPermission, )
+    pagination_class = CustomPagination
+    filter_backends = (DjangoFilterBackend, )
