@@ -8,15 +8,13 @@ from rest_framework import serializers
 from ..recipes.models import Ingredient, RecipeIngredient, Tag
 from ..users.models import User
 
-UserModel = get_user_model()
-
 
 class CustomUserSerializer(UserSerializer):
     password = serializers.CharField(write_only=True)
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
-        model = UserModel
+        model = User
         fields = (
             'email',
             'username',
