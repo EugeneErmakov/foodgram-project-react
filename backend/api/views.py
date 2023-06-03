@@ -5,8 +5,10 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import (
-    AllowAny
+    AllowAny, IsAuthenticatedOrReadOnly
 )
+from serializers import IngredientSerializer
+from ..recipes.models import Ingredient
 
 UserModel = get_user_model()
 
@@ -17,6 +19,9 @@ class UserViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     permission_classes = (AllowAny,)
     lookup_field = 'id'
+
+
+
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
