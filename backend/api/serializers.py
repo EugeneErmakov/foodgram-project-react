@@ -2,14 +2,16 @@ import base64
 
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
 from ..recipes.models import Ingredient, RecipeIngredient, Tag
+from ..users.models import User
 
 UserModel = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(UserSerializer):
     password = serializers.CharField(write_only=True)
     is_subscribed = serializers.SerializerMethodField()
 
@@ -24,6 +26,20 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'is_subscribed'
         )
+
+    def get_is_subscribed(self, obj):
+        user = self.context['request'].user
+        return (user.is_authenticated
+                and obj.subscribed_to.filter(subscriber=user).exists())
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'id', 'username',
+                  'first_name', 'last_name',
+                  'password')
+
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,6 +70,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
         model = RecipeIngredient
         fields = ('amount', 'name', 'measurement_unit', 'id')
 
+
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
@@ -63,6 +80,7 @@ class Base64ImageField(serializers.ImageField):
             data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
 
         return super().to_internal_value(data)
+
 
 class RecipeListSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
