@@ -5,7 +5,7 @@ from django.db import models
 UserModel = get_user_model()
 
 
-class TagsModel(models.Model):
+class Tag(models.Model):
     name = models.CharField(
         max_length=100,
         unique=True,
@@ -22,7 +22,7 @@ class TagsModel(models.Model):
         return self.name
 
 
-class IngredientsModel(models.Model):
+class Ingredient(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
     measurement_unit = models.CharField(
         max_length=200,
@@ -37,7 +37,7 @@ class IngredientsModel(models.Model):
         return self.name
 
 
-class RecipesModel(models.Model):
+class Recipes(models.Model):
     author = models.ForeignKey(
         UserModel,
         on_delete=models.CASCADE,
@@ -51,12 +51,12 @@ class RecipesModel(models.Model):
     )
     text = models.TextField()
     ingredients = models.ManyToManyField(
-        IngredientsModel,
+        Ingredient,
         related_name='recipes',
         verbose_name='Ингредиенты'
     )
     tags = models.ManyToManyField(
-        TagsModel,
+        Tag,
         related_name='tags',
         verbose_name='Теги'
     )
@@ -84,13 +84,13 @@ class RecipesModel(models.Model):
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
-        RecipesModel,
+        Recipes,
         on_delete=models.CASCADE,
         related_name='amount',
         verbose_name='Рецепт'
     )
     ingredient = models.ForeignKey(
-        IngredientsModel,
+        Ingredient,
         on_delete=models.CASCADE,
         related_name='recipe_ingredients',
         verbose_name='Ингредиент'
@@ -123,10 +123,10 @@ class Favorite(models.Model):
         UserModel,
         on_delete=models.CASCADE,
         related_name='favorites',
-        verbose_name='Автор избранного'
+        verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
-        RecipesModel,
+        Recipes,
         on_delete=models.CASCADE,
         related_name='favorites',
         verbose_name='Рецепт из избранного'
@@ -154,7 +154,7 @@ class ShoppingCart(models.Model):
         verbose_name='Автор списка покупок'
     )
     recipe = models.ForeignKey(
-        RecipesModel,
+        Recipes,
         on_delete=models.CASCADE,
         related_name='cart',
         verbose_name='Список покупок'
