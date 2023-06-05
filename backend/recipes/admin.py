@@ -2,16 +2,16 @@ from django.contrib import admin
 
 from .models import (
     Favorite,
-    IngredientsModel,
+    Ingredient,
     RecipeIngredient,
-    RecipesModel,
+    Recipe,
     ShoppingCart,
-    TagsModel
+    Tag
 )
 
 
-@admin.register(IngredientsModel)
-class IngredientsAdmin(admin.ModelAdmin):
+@admin.register(Ingredient)
+class IngredientAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'measurement_unit',
@@ -21,8 +21,8 @@ class IngredientsAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(TagsModel)
-class TagsAdmin(admin.ModelAdmin):
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'color',
@@ -33,8 +33,8 @@ class TagsAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(RecipesModel)
-class RecipesAdmin(admin.ModelAdmin):
+@admin.register(Recipe)
+class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'author',
         'name',

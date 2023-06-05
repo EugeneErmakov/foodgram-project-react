@@ -1,8 +1,8 @@
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
 
-UserModel = get_user_model()
+from users.models import User
 
 
 class Tag(models.Model):
@@ -37,9 +37,9 @@ class Ingredient(models.Model):
         return self.name
 
 
-class Recipes(models.Model):
+class Recipe(models.Model):
     author = models.ForeignKey(
-        UserModel,
+        User,
         on_delete=models.CASCADE,
         related_name='recipes',
         verbose_name='Автор рецепта'
@@ -84,7 +84,7 @@ class Recipes(models.Model):
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
-        Recipes,
+        Recipe,
         on_delete=models.CASCADE,
         related_name='amount',
         verbose_name='Рецепт'
@@ -120,13 +120,13 @@ class RecipeIngredient(models.Model):
 
 class Favorite(models.Model):
     user = models.ForeignKey(
-        UserModel,
+        User,
         on_delete=models.CASCADE,
         related_name='favorites',
         verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
-        Recipes,
+        Recipe,
         on_delete=models.CASCADE,
         related_name='favorites',
         verbose_name='Рецепт из избранного'
@@ -148,13 +148,13 @@ class Favorite(models.Model):
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
-        UserModel,
+        User,
         on_delete=models.CASCADE,
         related_name='cart',
         verbose_name='Автор списка покупок'
     )
     recipe = models.ForeignKey(
-        Recipes,
+        Recipe,
         on_delete=models.CASCADE,
         related_name='cart',
         verbose_name='Список покупок'

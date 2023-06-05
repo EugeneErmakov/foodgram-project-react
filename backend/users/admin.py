@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 from .models import Follow
-from .models import UserModel
+from .models import User
 
 
-@admin.register(UserModel)
-class UserModelAdmin(admin.ModelAdmin):
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'username',
