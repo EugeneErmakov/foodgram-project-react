@@ -1,4 +1,5 @@
 # from django.contrib.auth import get_user_model
+from django.core.validators import RegexValidator, MinValueValidator
 from django.core import validators
 from django.db import models
 
@@ -7,12 +8,16 @@ from users.models import User
 
 class Tag(models.Model):
     name = models.CharField(
-        max_length=100,
+        max_length=16,
         unique=True,
         verbose_name='Название'
     )
-    color = models.CharField(max_length=7, unique=True, verbose_name='Цвет')
-    slug = models.SlugField(max_length=100, unique=True)
+    color = models.CharField(
+        max_length=7,
+        unique=True,
+        validators=[RegexValidator('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$')],
+        verbose_name='Цвет')
+    slug = models.SlugField(max_length=50, unique=True)
 
     class Meta:
         verbose_name = 'Тег'
@@ -23,7 +28,7 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Название')
+    name = models.CharField(max_length=50, verbose_name='Название')
     measurement_unit = models.CharField(
         max_length=200,
         verbose_name='Единица измерения'
