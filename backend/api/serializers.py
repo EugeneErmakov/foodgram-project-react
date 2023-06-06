@@ -9,7 +9,7 @@ from users.models import User
 
 
 class CustomUserSerializer(UserSerializer):
-    password = serializers.CharField(write_only=True)
+    # password = serializers.CharField(write_only=True)
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
@@ -19,15 +19,16 @@ class CustomUserSerializer(UserSerializer):
             'username',
             'first_name',
             'last_name',
-            'password',
+            # 'password',
             'id',
             'is_subscribed'
         )
 
     def get_is_subscribed(self, obj):
-        user = self.context['request'].user
-        return (user.is_authenticated
-                and obj.subscribed_to.filter(subscriber=user).exists())
+        request = self.context.get('request')
+        if self.context.get('request').user.is_anonymous:
+            return False
+        return obj.following.filter(user=request.user).exists()
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
