@@ -2,6 +2,7 @@ import base64
 
 from django.core.files.base import ContentFile
 from djoser.serializers import UserCreateSerializer, UserSerializer
+
 from recipes.models import Ingredient, RecipeIngredient, Tag
 from recipes.models import Recipe, Favorite, ShoppingCart
 from rest_framework import serializers
@@ -9,7 +10,6 @@ from users.models import User
 
 
 class CustomUserSerializer(UserSerializer):
-    # password = serializers.CharField(write_only=True)
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
@@ -19,7 +19,6 @@ class CustomUserSerializer(UserSerializer):
             'username',
             'first_name',
             'last_name',
-            # 'password',
             'id',
             'is_subscribed'
         )
@@ -41,8 +40,10 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('id', 'title', 'slug', 'description')
         model = Tag
+        fields = ('id', 'name', 'color', 'slug')
+        read_only_fields = ('name', 'color', 'slug')
+
 
 
 class IngredientSerializer(serializers.ModelSerializer):
