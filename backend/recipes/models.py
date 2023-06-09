@@ -28,7 +28,7 @@ class Tag(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Название')
+    name = models.CharField(max_length=100, verbose_name='Название')
     measurement_unit = models.CharField(
         max_length=200,
         verbose_name='Единица измерения'
@@ -138,6 +138,7 @@ class Favorite(models.Model):
     )
 
     class Meta:
+        default_related_name = 'favorites'
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
         constraints = [
