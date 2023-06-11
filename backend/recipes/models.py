@@ -1,6 +1,4 @@
-# from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator, MinValueValidator
-from django.core import validators
 from django.db import models
 
 from users.models import User
@@ -62,13 +60,13 @@ class Recipe(models.Model):
     )
     tags = models.ManyToManyField(
         Tag,
-        related_name='tags',
+        related_name='recipes',
         verbose_name='Теги'
     )
     cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время приготовления (в минутах)',
-        validators=(validators.MinValueValidator(
-            1, message='Минимальное время приготовления - 1 минута'),
+        validators=(
+            MinValueValidator(1, message='Минимальное время приготовления - 1 минута'),
         )
     )
 
@@ -87,28 +85,43 @@ class Recipe(models.Model):
         return self.name
 
 
+class TagRecipe(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE,
+                            related_name='tag_recipes',
+                            verbose_name='Тэг')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                               related_name='recipe_tags',
+                               verbose_name='Рецепт')
+
+    class Meta:
+        verbose_name = 'Тег для рецепта'
+        verbose_name_plural = 'Теги для рецептов'
+
+    def __str__(self):
+        return f'Тег "{self.tag}" для рецепта "{self.recipe}"'
+
+
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='amount',
-        verbose_name='Рецепт'
-    )
+        verbose_name='Рецепт',
+        related_name='recipe_ingredients')
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='recipe_ingredients',
+        related_name='ingredient_recipes',
         verbose_name='Ингредиент'
     )
     amount = models.PositiveSmallIntegerField(
         verbose_name='Количество',
-        validators=(validators.MinValueValidator(
+        validators=(MinValueValidator(
             1, message='Нельзя создать рецепт без ингредиентов'),
         )
     )
 
     class Meta:
-        ordering = ('-id', )
+        ordering = ('-id',)
         verbose_name = 'Количество ингредиента'
         verbose_name_plural = 'Количество ингредиентов'
         constraints = [
@@ -117,10 +130,9 @@ class RecipeIngredient(models.Model):
                 name='unique_recipe_ingredient'
             )
         ]
-        db_table = 'recipes_recipe_ingredient'
 
     def __str__(self):
-        return self.ingredient.name
+        return f'Ингредиент "{self.ingredient}" для рецепта {self.recipe}'
 
 
 class Favorite(models.Model):
@@ -138,7 +150,6 @@ class Favorite(models.Model):
     )
 
     class Meta:
-        default_related_name = 'favorites'
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
         constraints = [
@@ -157,13 +168,13 @@ class ShoppingCart(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='cart',
-        verbose_name='Автор списка покупок'
+        verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='cart',
-        verbose_name='Список покупок'
+        verbose_name='Рецепт'
     )
 
     class Meta:
