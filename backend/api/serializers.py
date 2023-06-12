@@ -184,8 +184,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             )
         return data
 
-
     def get_recipes_count(self, obj):
+        # return obj.following.recipes.count()
+
         return obj.author.recipes.count()
 
     def get_recipes(self, obj):
