@@ -124,12 +124,6 @@ class RecipeIngredient(models.Model):
         ordering = ('-id',)
         verbose_name = 'Количество ингредиента'
         verbose_name_plural = 'Количество ингредиентов'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['recipe', 'ingredient'],
-                name='unique_recipe_ingredient'
-            )
-        ]
 
     def __str__(self):
         return f'Ингредиент "{self.ingredient}" для рецепта {self.recipe}'

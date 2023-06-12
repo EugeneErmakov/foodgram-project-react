@@ -113,9 +113,23 @@ DJOSER = {
         'current_user': 'api.serializers.CustomUserSerializer',
     },
     'PERMISSIONS': {
+        'user_list': ['rest_framework.permissions.IsAuthenticated'],
         'user': ['rest_framework.permissions.IsAuthenticated'],
     },
 }
+# DJOSER = {
+#     'LOGIN_FIELD': 'email',
+#     'SERIALIZERS': {
+#         'user': 'api.serializers.UserGetRetrieveSerializer',
+#         'current_user': 'api.serializers.UserGetRetrieveSerializer',
+#         'user_create': 'api.serializers.UserCreateSerializer'
+#     },
+#     'PERMISSIONS': {
+#         'user_list': ['rest_framework.permissions.IsAuthenticated'],
+#         'user': ['rest_framework.permissions.IsAuthenticated']
+#     },
+#     'HIDE_USERS': False
+# }
 
 LANGUAGE_CODE = 'en-us'
 
