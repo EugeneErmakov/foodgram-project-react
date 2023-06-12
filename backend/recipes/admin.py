@@ -1,22 +1,12 @@
 from django.contrib import admin
 
-from .models import (Cart, Favorite, Ingredient, RecipeIngredient, Recipe, Tag,
-                     TagRecipe)
-
-
-class TagInlineAdmin(admin.TabularInline):
-    model = Recipe.tags.through
-
-
-class IngredientInlineAdmin(admin.TabularInline):
-    model = Recipe.ingredients.through
+from .models import (Cart, Favorite, Ingredient, Recipe, Tag)
 
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'author')
     list_filter = ('author', 'name', 'tags')
     readonly_fields = ('favorite_count',)
-    inlines = [TagInlineAdmin, IngredientInlineAdmin]
 
     @staticmethod
     def favorite_count(obj):
@@ -33,5 +23,3 @@ admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite)
 admin.site.register(Cart)
-admin.site.register(RecipeIngredient)
-admin.site.register(TagRecipe)
