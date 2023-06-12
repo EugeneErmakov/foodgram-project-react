@@ -4,16 +4,16 @@ from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Cart, Favorite, Ingredient, RecipeIngredient,
-                            Recipe, Tag)
 from rest_framework import permissions, serializers
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from users.models import User, Follow
 
+from users.models import User, Follow
+from recipes.models import (Cart, Favorite, Ingredient, RecipeIngredient,
+                            Recipe, Tag)
 from .filters import RecipeFilter, IngredientFilter
 from .permissions import IsAuthorOrAdminOrReadOnly
 from .serializers import (CreateRecipeSerializer, IngredientSerializer,
