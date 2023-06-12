@@ -4,10 +4,12 @@ from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from djoser.serializers import UserCreateSerializer, UserSerializer
-from recipes.models import Ingredient, RecipeIngredient, Recipe, Tag
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
+
+from recipes.models import Ingredient, RecipeIngredient, Recipe, Tag
 from users.models import User, Follow
+
 
 class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField()
@@ -42,12 +44,10 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit')
 
 
-
 class RecipeShortInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
-
 
 
 class RecipeIngredientRetrieveSerializer(serializers.ModelSerializer):
@@ -184,9 +184,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             )
         return data
 
-    #
-    # def get_recipes_count(self, obj):
-    #     return obj.recipes.count()
 
     def get_recipes_count(self, obj):
         return obj.author.recipes.count()

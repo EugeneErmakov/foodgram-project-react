@@ -4,17 +4,16 @@ from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (Cart, Favorite, Ingredient, RecipeIngredient,
-                            Recipe, Tag)
 from rest_framework import permissions, serializers
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from users.models import User, Follow
 
+from recipes.models import (Cart, Favorite, Ingredient, RecipeIngredient,
+                            Recipe, Tag)
+from users.models import User, Follow
 from .filters import RecipeFilter, IngredientFilter
 from .permissions import IsAuthorOrAdminOrReadOnly
 from .serializers import (CreateRecipeSerializer, IngredientSerializer,
@@ -25,7 +24,6 @@ from .serializers import (CreateRecipeSerializer, IngredientSerializer,
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    # pagination_class = PageNumberPagination
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     @action(methods=('GET',),
@@ -76,9 +74,6 @@ class IngredientViewSet(ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = (IngredientFilter,)
     search_fields = ('^name',)
-    # permission_classes = (permissions.AllowAny,)
-    # filter_backends = (filters.SearchFilter,)
-    # search_fields = ('^name',)
     pagination_class = None
 
 

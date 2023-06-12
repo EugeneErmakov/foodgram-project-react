@@ -55,14 +55,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -117,19 +109,6 @@ DJOSER = {
         'user': ['rest_framework.permissions.IsAuthenticated'],
     },
 }
-# DJOSER = {
-#     'LOGIN_FIELD': 'email',
-#     'SERIALIZERS': {
-#         'user': 'api.serializers.UserGetRetrieveSerializer',
-#         'current_user': 'api.serializers.UserGetRetrieveSerializer',
-#         'user_create': 'api.serializers.UserCreateSerializer'
-#     },
-#     'PERMISSIONS': {
-#         'user_list': ['rest_framework.permissions.IsAuthenticated'],
-#         'user': ['rest_framework.permissions.IsAuthenticated']
-#     },
-#     'HIDE_USERS': False
-# }
 
 LANGUAGE_CODE = 'en-us'
 
@@ -145,7 +124,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'

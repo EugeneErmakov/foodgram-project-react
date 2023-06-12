@@ -12,7 +12,7 @@ class IngredientInlineAdmin(admin.TabularInline):
     model = Recipe.ingredients.through
 
 
-class RecipeAdmin(admin.ModelAdmin):  # pragma: no cover
+class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'author')
     list_filter = ('author', 'name', 'tags')
     readonly_fields = ('favorite_count',)
