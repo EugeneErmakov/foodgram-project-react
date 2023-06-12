@@ -7,8 +7,8 @@ from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
 
-from recipes.models import Ingredient, RecipeIngredient, Recipe, Tag
 from users.models import User, Follow
+from recipes.models import Ingredient, RecipeIngredient, Recipe, Tag
 
 
 class CustomUserSerializer(UserSerializer):
@@ -185,8 +185,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         return data
 
     def get_recipes_count(self, obj):
-        # return obj.following.recipes.count()
-
         return obj.author.recipes.count()
 
     def get_recipes(self, obj):
