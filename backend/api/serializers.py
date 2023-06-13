@@ -186,7 +186,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     def get_recipes(self, obj):
         recipes = obj.author.recipes.all()
-        serializer = RecipeShortInfoSerializer(recipes, many=True, read_only=True)
+        serializer = RecipeShortInfoSerializer(
+            recipes, many=True, read_only=True
+        )
         return serializer.data
 
     def to_representation(self, instance):

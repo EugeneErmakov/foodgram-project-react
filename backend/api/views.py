@@ -5,7 +5,8 @@ from djoser.views import UserViewSet
 from rest_framework import permissions, serializers
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
+                                        IsAuthenticated)
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
@@ -15,7 +16,8 @@ from .filters import RecipeFilter, IngredientFilter
 from .permissions import IsAuthorOrAdminOrReadOnly
 from .serializers import (CreateRecipeSerializer, IngredientSerializer,
                           RecipeSerializer, RecipeShortInfoSerializer,
-                          TagSerializer, CustomUserSerializer, SubscriptionSerializer)
+                          TagSerializer, CustomUserSerializer,
+                          SubscriptionSerializer)
 from .utils import download_shopping_list
 
 
