@@ -4,10 +4,11 @@ from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from djoser.serializers import UserCreateSerializer, UserSerializer
-from recipes.models import Ingredient, RecipeIngredient, Recipe, Tag
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
-from users.models import User, Follow
+
+from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
+from users.models import Follow, User
 
 
 class CustomUserSerializer(UserSerializer):

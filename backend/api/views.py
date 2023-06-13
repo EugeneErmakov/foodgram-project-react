@@ -2,22 +2,22 @@ from django.db.models import Exists, OuterRef
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from rest_framework import permissions, serializers
-from rest_framework import status
+from rest_framework import permissions, serializers, status
 from rest_framework.decorators import action
-from rest_framework.permissions import (IsAuthenticatedOrReadOnly,
-                                        IsAuthenticated)
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
-from users.models import User, Follow
-from recipes.models import (Cart, Favorite, Ingredient, Recipe, Tag)
-from .filters import RecipeFilter, IngredientFilter
+from recipes.models import Cart, Favorite, Ingredient, Recipe, Tag
+from users.models import Follow, User
+
+from .filters import IngredientFilter, RecipeFilter
 from .permissions import IsAuthorOrAdminOrReadOnly
-from .serializers import (CreateRecipeSerializer, IngredientSerializer,
-                          RecipeSerializer, RecipeShortInfoSerializer,
-                          TagSerializer, CustomUserSerializer,
-                          SubscriptionSerializer)
+from .serializers import (CreateRecipeSerializer, CustomUserSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          RecipeShortInfoSerializer, SubscriptionSerializer,
+                          TagSerializer)
 from .utils import download_shopping_list
 
 
