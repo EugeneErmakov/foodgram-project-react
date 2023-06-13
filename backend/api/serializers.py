@@ -4,11 +4,10 @@ from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from djoser.serializers import UserCreateSerializer, UserSerializer
+from recipes.models import Ingredient, RecipeIngredient, Recipe, Tag
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
-
 from users.models import User, Follow
-from recipes.models import Ingredient, RecipeIngredient, Recipe, Tag
 
 
 class CustomUserSerializer(UserSerializer):
@@ -93,21 +92,28 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'author', 'tags', 'ingredients', 'name', 'image',
                   'text', 'cooking_time')
 
+    @staticmethod
+    def create_recipe_ingredient(recipe, ingredients):
+        bulk_list = list()
+        for ingredient in ingredients:
+            bulk_list.append(
+                RecipeIngredient(
+                    ingredient=get_object_or_404(
+                        Ingredient,
+                        name=ingredient.get('ingredient').name
+                    ),
+                    recipe=recipe,
+                    amount=ingredient.get('amount')
+                )
+            )
+        RecipeIngredient.objects.bulk_create(bulk_list)
+
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-        for ingredient in ingredients:
-            current_ingredient = get_object_or_404(
-                Ingredient,
-                name=ingredient.get('ingredient').name
-            )
-            RecipeIngredient.objects.create(
-                ingredient=current_ingredient,
-                recipe=recipe,
-                amount=ingredient.get('amount')
-            )
+        self.create_recipe_ingredient(recipe, ingredients)
         return recipe
 
     def update(self, instance, validated_data):
@@ -120,16 +126,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             setattr(instance, key, data)
         instance.save()
         instance.tags.set(tags)
-        for ingredient in ingredients:
-            current_ingredient = get_object_or_404(
-                Ingredient,
-                name=ingredient.get('ingredient').name
-            )
-            RecipeIngredient.objects.create(
-                ingredient=current_ingredient,
-                recipe=instance,
-                amount=ingredient.get('amount')
-            )
+        self.create_recipe_ingredient(instance, ingredients)
         return instance
 
     def to_representation(self, instance):
@@ -195,12 +192,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         return {
-            'email': representation['author']['email'],
-            'id': representation['author']['id'],
             'username': representation['author']['username'],
             'first_name': representation['author']['first_name'],
             'last_name': representation['author']['last_name'],
-            'is_subscribed': representation['author']['is_subscribed'],
             'recipes': representation['recipes'],
             'recipes_count': representation['recipes_count'],
         }
