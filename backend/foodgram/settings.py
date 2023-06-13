@@ -1,11 +1,13 @@
 import os
 from pathlib import Path
 
+from django.core.management.utils import get_random_secret_key
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-s8palv!!ldolqthjl6iq=8p9f!-*4)6*h@-bn4pc!%vv+u6#je')
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key)
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'foodgram.ermstudio.ru']
 
