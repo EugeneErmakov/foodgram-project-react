@@ -1,6 +1,4 @@
 from django.db.models import Exists, OuterRef
-from django.db.models import Sum
-from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
@@ -12,13 +10,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from users.models import User, Follow
-from recipes.models import (Cart, Favorite, Ingredient, RecipeIngredient,
-                            Recipe, Tag)
+from recipes.models import (Cart, Favorite, Ingredient, Recipe, Tag)
 from .filters import RecipeFilter, IngredientFilter
 from .permissions import IsAuthorOrAdminOrReadOnly
 from .serializers import (CreateRecipeSerializer, IngredientSerializer,
                           RecipeSerializer, RecipeShortInfoSerializer,
                           TagSerializer, CustomUserSerializer, SubscriptionSerializer)
+from .utils import download_shopping_list
 
 
 class CustomUserViewSet(UserViewSet):
@@ -151,22 +149,6 @@ class RecipeViewSet(ModelViewSet):
 
     @action(detail=False, permission_classes=[permissions.IsAuthenticated])
     def download_shopping_cart(self, request):
-        user = request.user
-        if not user.cart.exists():
+        if not request.user.cart.exists():
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        ingredients = RecipeIngredient.objects.filter(
-            recipe__cart__user=request.user
-        ).values(
-            'ingredient__name',
-             'ingredient__measurement_unit',
-        ).annotate(amount=Sum('amount')).order_by('ingredient__name')
-        shopping_list = f'Список покупок:\n\n'
-        shopping_list += '\n'.join([
-            f'- {ingredient["ingredient__name"]} {ingredient["amount"]} '
-            f'{ingredient["ingredient__measurement_unit"]}'
-            for ingredient in ingredients
-        ])
-        file_name = 'shopping_list.txt'
-        response = HttpResponse(shopping_list, content_type='text/plain')
-        response['Content-Disposition'] = f'attachment; filename={file_name}'
-        return response
+        return download_shopping_list(request)
