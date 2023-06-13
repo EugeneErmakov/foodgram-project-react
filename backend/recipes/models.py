@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator, MinValueValidator
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.db import models
 
 from users.models import User
@@ -66,7 +66,8 @@ class Recipe(models.Model):
     cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время приготовления (в минутах)',
         validators=(
-            MinValueValidator(1, message='Минимальное время приготовления - 1 минута'),
+            MinValueValidator(1, message='Минимальное время приготовления - 1 минута!'),
+            MaxValueValidator(1440, message='Максимальное время приготовления - 24 часа!'),
         )
     )
 
