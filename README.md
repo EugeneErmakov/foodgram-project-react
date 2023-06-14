@@ -10,6 +10,7 @@
 
 Работу сайта можно оценить по адресу: https://foodgram.ermstudio.ru/
 
+Доступ к админке: adm adm
 
 ## Технологии
 [![Python](https://img.shields.io/badge/-Python-464646?style=plastic&logo=Python&logoColor=56C0C0&color=508050)](https://www.python.org/)
