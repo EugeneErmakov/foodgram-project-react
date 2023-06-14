@@ -95,7 +95,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
     def validate_name(self, value):
         if not any(char.isalpha() for char in value):
-            raise serializers.ValidationError("Название не может состоять только из цифр или знаков!")
+            raise serializers.ValidationError(
+                "Название не может состоять только из цифр или знаков!"
+            )
         return value
 
     @staticmethod
