@@ -93,6 +93,11 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'author', 'tags', 'ingredients', 'name', 'image',
                   'text', 'cooking_time')
 
+    def validate_name(self, value):
+        if not any(char.isalpha() for char in value):
+            raise serializers.ValidationError("Название не может состоять только из цифр или знаков!")
+        return value
+
     @staticmethod
     def create_recipe_ingredient(recipe, ingredients):
         bulk_list = list()
