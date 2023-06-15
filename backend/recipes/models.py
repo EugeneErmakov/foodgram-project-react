@@ -119,8 +119,11 @@ class RecipeIngredient(models.Model):
     )
     amount = models.PositiveSmallIntegerField(
         verbose_name='Количество',
-        validators=(MinValueValidator(
-            1, message='Нельзя создать рецепт без ингредиентов'),
+        validators=(
+            MinValueValidator(
+                1, message='Нельзя создать рецепт без ингредиентов'),
+            MaxValueValidator(
+                30000, message='Вес ингридиента не может быть больше 30кг!'),
         )
     )
 

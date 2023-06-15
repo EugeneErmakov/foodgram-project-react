@@ -51,14 +51,13 @@ class CustomUserViewSet(UserViewSet):
                 context={'request': request},
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        elif request.method == 'DELETE':
-            author = self.get_object()
-            deleted = Follow.objects.get(
-                user=user, author=author).delete()
-            if deleted:
-                return Response({
-                    'message': 'Вы отписались от этого автора'},
-                    status=status.HTTP_204_NO_CONTENT)
+        author = self.get_object()
+        deleted = Follow.objects.get(
+            user=user, author=author).delete()
+        if deleted:
+            return Response({
+                'message': 'Вы отписались от этого автора'},
+                status=status.HTTP_204_NO_CONTENT)
 
 
 class TagViewSet(ReadOnlyModelViewSet):
